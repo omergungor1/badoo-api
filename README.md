@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Badoo Admin Panel
 
-## Getting Started
+Next.js 16 admin paneli — Badoo mobil uygulaması (`badoo` şeması) için.
 
-First, run the development server:
+## Kurulum
+
+1. `.env.local` doldurun:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+SUPABASE_SERVICE_ROLE_KEY=   # Dashboard → Settings → API (asla client'a koyma)
+ADMIN_EMAILS=sen@ornek.com,diger@ornek.com
+CLAUDE_API_KEY=              # veya ANTHROPIC_API_KEY
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Supabase’de ilgili e-posta ile Auth kullanıcısı oluşturun (Dashboard → Authentication).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+3. API settings’te `badoo` şemasının exposed olduğundan emin olun.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Meal API yardımcı SQL: `sql/meal_api_helpers.sql` (match_food + trigger).
 
-## Learn More
+5. Çalıştırın:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`http://localhost:3000/login` → admin e-posta ile giriş → `/admin/dashboard`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Meal API (mobil)
 
-## Deploy on Vercel
+| Method | Path | Body |
+|--------|------|------|
+| POST | `/api/meals/analyze-image` | `multipart/form-data` → `image` |
+| POST | `/api/meals/analyze-text` | JSON `{ "text": "..." }` |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Auth: `Authorization: Bearer <supabase_access_token>`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Mobil entegrasyon: [`docs/mobile-meal-api.md`](docs/mobile-meal-api.md)

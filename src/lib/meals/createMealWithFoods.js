@@ -49,7 +49,9 @@ export async function createMealWithFoods(params) {
   const { data: meal, error: mealError } = await admin
     .from("meals")
     .insert(mealInsert)
-    .select("id, source, meal_title, total_calories, total_protein, total_carbohydrates, total_fats, eaten_at")
+    .select(
+      "id, source, meal_title, image_url, total_calories, total_protein, total_carbohydrates, total_fats, eaten_at",
+    )
     .single();
 
   if (mealError) throw mealError;
@@ -107,7 +109,7 @@ export async function createMealWithFoods(params) {
   const { data: freshMeal, error: freshError } = await admin
     .from("meals")
     .select(
-      "id, source, meal_title, total_calories, total_protein, total_carbohydrates, total_fats, eaten_at",
+      "id, source, meal_title, image_url, total_calories, total_protein, total_carbohydrates, total_fats, eaten_at",
     )
     .eq("id", meal.id)
     .single();
